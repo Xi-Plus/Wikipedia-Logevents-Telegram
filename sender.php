@@ -42,6 +42,10 @@ if (count($res["query"]["logevents"])) {
 		if (count($C['allowlogtype']) > 0 && !in_array($log["type"], $C['allowlogtype'])) {
 			continue;
 		}
+		if (in_array($log['user'], $C['ignoreuser'])) {
+			echo "ignore user ".$log['user']."\n";
+			continue;
+		}
 		$time = strtotime($log["timestamp"])+3600*8;
 		$message = "";
 		$pass = false;
