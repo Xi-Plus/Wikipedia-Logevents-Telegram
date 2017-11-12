@@ -21,5 +21,5 @@ function blockflags(&$item, $key) {
 function protectparams($text) {
 	return str_replace(
 		["[edit=", "[move=", "[create=", "=autoconfirmed]", "=sysop]"],
-		["[編輯=", "[移動=", "[建立=", "=僅允許已自動確認的使用者]", "=僅限管理員]"], $item);
+		["[編輯=", "[移動=", "[建立=", "=僅允許已自動確認的使用者]", "=僅限管理員]"], $text);
 }
