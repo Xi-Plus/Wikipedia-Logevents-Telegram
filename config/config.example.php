@@ -4,6 +4,7 @@ $C['token'] = 'token';
 $C['chat_id'] = 'chat_id';
 
 $C['allowlogtype'] = [];
+$C["limit"] = 50;
 
 $C["wikiapi"] = "https://zh.wikipedia.org/w/api.php";
 $C["user"] = "";

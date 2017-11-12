@@ -25,9 +25,9 @@ $res = cURL($C["wikiapi"]."?".http_build_query(array(
 	"action" => "query",
 	"format" => "json",
 	"list" => "logevents",
+	"leprop" => "ids|title|type|user|timestamp|comment|details",
 	"leend" => $data["lasttime"],
-	// "ledir" => "newer",
-	"lelimit" => "max"
+	"lelimit" => $C["limit"]
 )));
 if ($res === false) {
 	exit("fetch page fail\n");
@@ -44,13 +44,28 @@ if (count($res["query"]["logevents"])) {
 		}
 		$time = strtotime($log["timestamp"])+3600*8;
 		$message = "";
+		$pass = false;
 		switch ($log["type"]) {
 			case 'block':
 				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
 				$title = substr($log["title"], 5);
-				$message .= '已封鎖 <a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($title).'">'.$title.'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($title).'">對話</a>) ';
-				$message .= '期限為 '.$log["params"]["duration"].' ';
+				switch ($log["action"]) {
+					case 'block':
+						$message .= '已封鎖 <a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($title).'">'.$title.'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($title).'">對話</a>) ';
+						$message .= '期限為 '.$log["params"]["duration"].' ';
+						break;
+					case 'reblock':
+						$message .= '已變更 <a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($title).'">'.$title.'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($title).'">對話</a>) ';
+						$message .= '的封鎖設定期限為 '.$log["params"]["duration"].' ';
+						break;
+					case 'unblock':
+						$message .= '已解除封鎖 <a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($title).'">'.$title.'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($title).'">對話</a>) ';
+						break;
+					default:
+						$pass = true;
+						break;
+				}
 				if (count($log["params"]["flags"])) {
 					array_walk($log["params"]["flags"], 'blockflags');
 					$message .= '('.implode("、", $log["params"]["flags"]).') ';
@@ -61,15 +76,42 @@ if (count($res["query"]["logevents"])) {
 			case 'protect':
 				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
-				$message .= '已保護 <a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
-				$message .= protectparams($log["params"]["description"]).' ';
+				switch ($log["action"]) {
+					case 'protect':
+						$message .= '已保護 <a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
+						$message .= protectparams($log["params"]["description"]).' ';
+						break;
+					case 'unprotect':
+						$message .= '已移除 <a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
+						$message .= '的保護 ';
+						break;
+					case 'modify':
+						$message .= '已更改 <a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
+						$message .= '的保護層級 ';
+						$message .= protectparams($log["params"]["description"]).' ';
+						break;
+					default:
+						$pass = true;
+						break;
+				}
 				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
 				break;
 			
 			case 'delete':
 				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
-				$message .= '刪除頁面 <a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
+				switch ($log["action"]) {
+					case 'delete':
+						$message .= '刪除頁面 ';
+						break;
+					case 'restore':
+						$message .= '還原頁面 ';
+						break;
+					default:
+						$pass = true;
+						break;
+				}
+				$message .= '<a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
 				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
 				break;
 			
@@ -93,10 +135,10 @@ if (count($res["query"]["logevents"])) {
 				break;
 			
 			default:
-				# code...
+				$pass = true;
 				break;
 		}
-		if ($message !== "") {
+		if (!$pass && $message !== "") {
 			$commend = 'curl https://api.telegram.org/bot'.$C['token'].'/sendMessage -d "chat_id='.$C['chat_id'].'&parse_mode=HTML&disable_web_page_preview=1&text='.urlencode($message).'"';
 			system($commend);
 			echo "\n";
