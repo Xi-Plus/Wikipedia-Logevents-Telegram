@@ -52,9 +52,10 @@ if (count($res["query"]["logevents"])) {
 				$message .= '已封鎖 <a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($title).'">'.$title.'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($title).'">對話</a>) ';
 				$message .= '期限為 '.$log["params"]["duration"].' ';
 				if (count($log["params"]["flags"])) {
-					$message .= '('.implode("、", array_walk($log["params"]["flags"]), 'parsename', $C['blockflags']).') ';
+					array_walk($log["params"]["flags"], 'blockflags');
+					$message .= '('.implode("、", $log["params"]["flags"]).') ';
 				}
-				$message .= '('.parsewikitext($log["comment"]).')';
+				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
 				break;
 			
 			case 'protect':
@@ -62,14 +63,14 @@ if (count($res["query"]["logevents"])) {
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
 				$message .= '已保護 <a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
 				$message .= protectparams($log["params"]["description"]).' ';
-				$message .= '('.parsewikitext($log["comment"]).')';
+				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
 				break;
 			
 			case 'delete':
 				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
 				$message .= '刪除頁面 <a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
-				$message .= '('.parsewikitext($log["comment"]).')';
+				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
 				break;
 			
 			case 'rights':
@@ -88,7 +89,7 @@ if (count($res["query"]["logevents"])) {
 				} else {
 					$message .= '無 ';
 				}
-				$message .= '('.parsewikitext($log["comment"]).')';
+				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
 				break;
 			
 			default:
