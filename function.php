@@ -11,8 +11,9 @@ function parsewikitext($text) {
 function blockflags(&$item, $key) {
 	$f = [
 		'anononly' => '僅限匿名使用者',
-		'nocreate' => '停用帳號建立',
 		'noautoblock' => '停用自動封鎖',
+		'nocreate' => '停用帳號建立',
+		'noemail' => '停用電子郵件',
 		'nousertalk' => '無法編輯自己的對話頁面'
 	];
 	if (isset($f[$item])) {
