@@ -74,7 +74,7 @@ if (count($res["query"]["logevents"])) {
 					array_walk($log["params"]["flags"], 'blockflags');
 					$message .= '('.implode("、", $log["params"]["flags"]).') ';
 				}
-				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
+				$message .= '('.parsewikitext($log["comment"]).')';
 				break;
 			
 			case 'protect':
@@ -98,7 +98,7 @@ if (count($res["query"]["logevents"])) {
 						$pass = true;
 						break;
 				}
-				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
+				$message .= '('.parsewikitext($log["comment"]).')';
 				break;
 			
 			case 'delete':
@@ -116,7 +116,7 @@ if (count($res["query"]["logevents"])) {
 						break;
 				}
 				$message .= '<a href="https://zh.wikipedia.org/wiki/'.rawurlencode($log["title"]).'">'.$log["title"].'</a> ';
-				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
+				$message .= '('.parsewikitext($log["comment"]).')';
 				break;
 			
 			case 'rights':
@@ -135,7 +135,7 @@ if (count($res["query"]["logevents"])) {
 				} else {
 					$message .= '無 ';
 				}
-				$message .= '('.parsewikitext(htmlentities($log["comment"])).')';
+				$message .= '('.parsewikitext($log["comment"]).')';
 				break;
 			
 			default:

@@ -1,6 +1,8 @@
 <?php
 
 function parsewikitext($text) {
+	$text = html_entity_decode($text);
+	$text = htmlspecialchars($text);
 	$text = preg_replace("/\[\[([^\|\]]+?)]]/", '<a href="https://zh.wikipedia.org/wiki/$1">$1</a>', $text);
 	$text = preg_replace("/\[\[([^\|\]]+?)\|([^]]+?)]]/", '<a href="https://zh.wikipedia.org/wiki/$1">$2</a>', $text);
 	return $text;
