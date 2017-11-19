@@ -51,6 +51,7 @@ if (count($res["query"]["logevents"])) {
 		$pass = false;
 		switch ($log["type"]) {
 			case 'block':
+				$message .= "#封禁 ";
 				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
 				$title = substr($log["title"], 5);
@@ -78,6 +79,7 @@ if (count($res["query"]["logevents"])) {
 				break;
 			
 			case 'protect':
+				$message .= "#保護 ";
 				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
 				switch ($log["action"]) {
@@ -102,6 +104,7 @@ if (count($res["query"]["logevents"])) {
 				break;
 			
 			case 'delete':
+				$message .= "#刪除 ";
 				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
 				switch ($log["action"]) {
@@ -120,6 +123,7 @@ if (count($res["query"]["logevents"])) {
 				break;
 			
 			case 'rights':
+				$message .= "#權限 ";
 				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
 				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($log["user"]).'">'.$log["user"].'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($log["user"]).'">對話</a>) ';
 				$title = substr($log["title"], 5);
