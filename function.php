@@ -26,3 +26,18 @@ function protectparams($text) {
 		["[edit=", "[move=", "[create=", "=autoconfirmed]", "=sysop]"],
 		["[編輯=", "[移動=", "[建立=", "=僅允許已自動確認的使用者]", "=僅限管理員]"], $text);
 }
+
+function rightparams(&$item, $key) {
+	$name = [
+		'ipblock-exempt' => 'IP 封鎖例外',
+		'rollbacker' => '回退員',
+		'patroller' => '巡查員',
+		'autoreviewer' => '巡查豁免者',
+		'flood' => '機器使用者',
+		'massmessage' => '大量訊息傳送者',
+		'confirmed' => '已確認的使用者'
+	];
+	if (isset($name[$item])) {
+		$item = $name[$item];
+	}
+}
