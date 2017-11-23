@@ -144,6 +144,28 @@ if (count($res["query"]["logevents"])) {
 				$message .= '('.parsewikitext($log["comment"]).')';
 				break;
 			
+			case 'newusers':
+				$message .= "#新用戶 ";
+				$message .= date("Y年m月d日", $time).' ('.$C["day"][date("w", $time)].') '.date("H:i", $time).' ';
+				$newuser = substr($log["title"], 5);
+				$message .= '<a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($newuser).'">'.$newuser.'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($newuser).'">對話</a>) ';
+				if (isset($C['usernamecheckapi']) && $C['usernamecheckapi'] !== "") {
+					$check = file_get_contents($C['usernamecheckapi'].rawurlencode($newuser));
+					if ($check !== false) {
+						$check = json_decode($check, true);
+						foreach ($check["levenshtein"] as $value) {
+							$message .= "\n編輯距離=".$value["value"].": ".$value["user"];
+						}
+						foreach ($check["similar_text"] as $value) {
+							$message .= "\n相同文字=".$value["value"].": ".$value["user"];
+						}
+						foreach ($check["similar_text_precent"] as $value) {
+							$message .= "\n相似比例=".round($value["value"], 0)."%: ".$value["user"];
+						}
+					}
+				}
+				break;
+
 			default:
 				$pass = true;
 				break;
