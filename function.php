@@ -29,13 +29,14 @@ function protectparams($text) {
 
 function rightparams(&$item, $key) {
 	$name = [
-		'ipblock-exempt' => 'IP 封鎖例外',
-		'rollbacker' => '回退員',
-		'patroller' => '巡查員',
 		'autoreviewer' => '巡查豁免者',
+		'confirmed' => '已確認的使用者',
 		'flood' => '機器使用者',
+		'ipblock-exempt' => 'IP 封鎖例外',
 		'massmessage' => '大量訊息傳送者',
-		'confirmed' => '已確認的使用者'
+		'patroller' => '巡查員',
+		'rollbacker' => '回退員',
+		'sysop' => '管理員'
 	];
 	if (isset($name[$item])) {
 		$item = $name[$item];
