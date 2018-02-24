@@ -176,9 +176,12 @@ if (count($res["query"]["logevents"])) {
 				break;
 		}
 		if (!$pass && $message !== "") {
-			$commend = 'curl https://api.telegram.org/bot'.$C['token'].'/sendMessage -d "chat_id='.$C['chat_id'].'&parse_mode=HTML&disable_web_page_preview=1&text='.urlencode($message).'"';
-			system($commend);
-			echo "\n";
+			foreach ($C['chat_id'] as $chat_id => $check) {
+				if ($check($log)) {
+					$commend = 'curl https://api.telegram.org/bot'.$C['token'].'/sendMessage -d "chat_id='.$chat_id.'&parse_mode=HTML&disable_web_page_preview=1&text='.urlencode($message).'" > /dev/null 2>&1';
+					system($commend);
+				}
+			}
 		} else {
 			// var_dump($log);
 		}

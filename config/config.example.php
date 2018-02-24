@@ -1,7 +1,18 @@
 <?php
 
 $C['token'] = 'token';
-$C['chat_id'] = 'chat_id';
+$C['chat_id'] = [
+	'chat_id_1' => function($log) {
+		return true;
+	},
+	'chat_id_2' => function($log) {
+		if ($log['type'] == 'block') {
+			return true;
+		} else {
+			return false;
+		}
+	} 
+];
 
 $C['allowlogtype'] = [];
 $C['limit'] = 50;
