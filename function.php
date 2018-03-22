@@ -29,12 +29,13 @@ function protectparams($text) {
 
 function rightparams(&$item, $key) {
 	$name = [
+		'accountcreator' => '帳號建立員',
 		'autoreviewer' => '巡查豁免者',
 		'bureaucrat' => '行政員',
 		'confirmed' => '已確認的使用者',
 		'flood' => '機器使用者',
 		'ipblock-exempt' => 'IP 封鎖例外',
-		'massmessage' => '大量訊息傳送者',
+		'massmessage-sender' => '大量訊息傳送者',
 		'oversight' => '監督員',
 		'patroller' => '巡查員',
 		'rollbacker' => '回退員',
