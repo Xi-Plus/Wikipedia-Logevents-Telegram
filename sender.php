@@ -51,6 +51,8 @@ if (count($res["query"]["logevents"])) {
 			echo "ignore user ".$log['user']."\n";
 			continue;
 		}
+		$logorig = $log;
+
 		$time = strtotime($log["timestamp"])+3600*8;
 		$message = "";
 		$pass = false;
@@ -177,7 +179,7 @@ if (count($res["query"]["logevents"])) {
 		}
 		if (!$pass && $message !== "") {
 			foreach ($C['chat_id'] as $chat_id => $check) {
-				if ($check($log)) {
+				if ($check($logorig)) {
 					$commend = 'curl https://api.telegram.org/bot'.$C['token'].'/sendMessage -d "chat_id='.$chat_id.'&parse_mode=HTML&disable_web_page_preview=1&text='.urlencode($message).'" > /dev/null 2>&1';
 					system($commend);
 				}
