@@ -33,6 +33,7 @@ function rightparams(&$item, $key) {
 		'autoreviewer' => '巡查豁免者',
 		'bureaucrat' => '行政員',
 		'confirmed' => '已確認的使用者',
+		'filemover' => '檔案移動員',
 		'flood' => '機器使用者',
 		'ipblock-exempt' => 'IP 封鎖例外',
 		'massmessage-sender' => '大量訊息傳送者',
