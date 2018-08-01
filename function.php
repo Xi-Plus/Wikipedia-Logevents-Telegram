@@ -36,6 +36,7 @@ function rightparams(&$item, $key) {
 		'eventparticipant' => '活動參與者',
 		'filemover' => '檔案移動員',
 		'flood' => '機器使用者',
+		'interface-admin' => '介面管理員',
 		'ipblock-exempt' => 'IP 封鎖例外',
 		'massmessage-sender' => '大量訊息傳送者',
 		'oversight' => '監督員',
