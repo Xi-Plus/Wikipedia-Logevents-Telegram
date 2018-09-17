@@ -47,7 +47,7 @@ if (count($res["query"]["logevents"])) {
 		if (count($C['allowlogtype']) > 0 && !in_array($log["type"], $C['allowlogtype'])) {
 			continue;
 		}
-		if (in_array($log['user'], $C['ignoreuser'])) {
+		if (in_array($log['user'], $C['ignoreuser']) && $log["type"] != 'rights') {
 			echo "ignore user ".$log['user']."\n";
 			continue;
 		}
