@@ -27,7 +27,7 @@ function protectparams($text) {
 		["[編輯=", "[移動=", "[建立=", "=僅允許已自動確認的使用者]", "=僅限管理員]"], $text);
 }
 
-function rightparams(&$item, $key) {
+function rightparams($group) {
 	$name = [
 		'accountcreator' => '帳號建立員',
 		'autoreviewer' => '巡查豁免者',
@@ -44,7 +44,25 @@ function rightparams(&$item, $key) {
 		'rollbacker' => '回退員',
 		'sysop' => '管理員'
 	];
-	if (isset($name[$item])) {
-		$item = $name[$item];
+	return $name[$group];
+}
+
+function parserights($groups, $metadata) {
+	$res = [];
+	foreach ($groups as $key => $_) {
+		$expiry = $metadata[$key]["expiry"];
+		if ($expiry) {
+			$res []= sprintf("%s（%s/%s/%s %s:%s）",
+				rightparams($groups[$key]),
+				substr($expiry, 0, 4),
+				substr($expiry, 5, 2),
+				substr($expiry, 8, 2),
+				substr($expiry, 11, 2),
+				substr($expiry, 14, 2)
+			);
+		} else {
+			$res []= rightparams($groups[$key]);
+		}
 	}
+	return implode("、", $res);
 }

@@ -136,15 +136,13 @@ if (count($res["query"]["logevents"])) {
 				$title = substr($log["title"], 5);
 				$message .= '已更改 <a href="https://zh.wikipedia.org/wiki/Special:Contributions/'.rawurlencode($title).'">'.$title.'</a> (<a href="https://zh.wikipedia.org/wiki/User_talk:'.rawurlencode($title).'">對話</a>) 的群組成員資格由 ';
 				if (count($log["params"]["oldgroups"])) {
-					array_walk($log["params"]["oldgroups"], 'rightparams');
-					$message .= implode("、", $log["params"]["oldgroups"]).' ';
+					$message .= parserights($log["params"]["oldgroups"], $log["params"]["oldmetadata"]);
 				} else {
 					$message .= '無 ';
 				}
 				$message .= '成為 ';
 				if (count($log["params"]["newgroups"])) {
-					array_walk($log["params"]["newgroups"], 'rightparams');
-					$message .= implode("、", $log["params"]["newgroups"]).' ';
+					$message .= parserights($log["params"]["newgroups"], $log["params"]["newmetadata"]);
 				} else {
 					$message .= '無 ';
 				}
