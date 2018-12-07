@@ -51,7 +51,9 @@ function parserights($groups, $metadata) {
 	$res = [];
 	foreach ($groups as $key => $_) {
 		$expiry = $metadata[$key]["expiry"];
-		if ($expiry) {
+		if ($expiry == "infinity") {
+			$res []= rightparams($groups[$key]);
+		} else {
 			$res []= sprintf("%s（%s/%s/%s %s:%s）",
 				rightparams($groups[$key]),
 				substr($expiry, 0, 4),
@@ -60,8 +62,6 @@ function parserights($groups, $metadata) {
 				substr($expiry, 11, 2),
 				substr($expiry, 14, 2)
 			);
-		} else {
-			$res []= rightparams($groups[$key]);
 		}
 	}
 	return implode("、", $res);
