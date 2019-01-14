@@ -31,6 +31,7 @@ function rightparams($group) {
 	$name = [
 		'accountcreator' => '帳號建立員',
 		'autoreviewer' => '巡查豁免者',
+		'bot' => '機器人',
 		'bureaucrat' => '行政員',
 		'confirmed' => '已確認的使用者',
 		'eventparticipant' => '活動參與者',
